@@ -278,11 +278,13 @@ namespace XesignNotes.App.Windows
 
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
         {
+#if false
             if (e.Key == Key.Q)
                 ThemeManager.Config_SetTheme(ThemeManager.Theme.Light);
 
             if (e.Key == Key.E)
                 ThemeManager.Config_SetTheme(ThemeManager.Theme.Dark);
+#endif
         }
     }
 }
