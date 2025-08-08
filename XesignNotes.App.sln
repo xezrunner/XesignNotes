@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XesignNotes.App", "XesignNotes.App\XesignNotes.App.csproj", "{03A64481-A7E3-463A-9BD6-CCED11EBB0E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeZrunner.UI", "..\XeZrunner.UI\XeZrunner.UI\XeZrunner.UI.csproj", "{D04773CB-BFB2-4DC9-AE70-DA99C2B38DA5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{03A64481-A7E3-463A-9BD6-CCED11EBB0E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03A64481-A7E3-463A-9BD6-CCED11EBB0E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03A64481-A7E3-463A-9BD6-CCED11EBB0E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03A64481-A7E3-463A-9BD6-CCED11EBB0E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D04773CB-BFB2-4DC9-AE70-DA99C2B38DA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D04773CB-BFB2-4DC9-AE70-DA99C2B38DA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D04773CB-BFB2-4DC9-AE70-DA99C2B38DA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D04773CB-BFB2-4DC9-AE70-DA99C2B38DA5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D42CB2C7-9AEE-4199-8C31-95A9A0FB9A32}
+	EndGlobalSection
+EndGlobal

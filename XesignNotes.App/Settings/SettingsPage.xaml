@@ -1,0 +1,70 @@
+﻿<Page x:Name="page" x:Class="XesignNotes.App.Settings.SettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:XesignNotes.App.Settings"
+      xmlns:controls="clr-namespace:XeZrunner.UI.Controls;assembly=XeZrunner.UI"
+      xmlns:controlfx="clr-namespace:XeZrunner.UI.ControlEffects;assembly=XeZrunner.UI"
+      xmlns:buttons="clr-namespace:XeZrunner.UI.Controls.Buttons;assembly=XeZrunner.UI"
+      mc:Ignorable="d" 
+      d:DesignHeight="360" d:DesignWidth="600"
+      Title="Settings" Background="Transparent" Foreground="{DynamicResource Foreground}"
+      
+      controlfx:PointerTracker.Enabled="True"
+      
+      Loaded="Page_Loaded">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Height="40">
+
+            <Rectangle Fill="{DynamicResource Background}" Opacity="0" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+
+                <buttons:AppBarButton x:Name="appbar_backButton" Height="40" Icon="&#xe112;" FontSize="14" Click="appbar_backButton_Click" />
+
+                <TextBlock Text="Settings"
+                           FontFamily="/Fonts/#Google Sans" FontSize="15"
+                           VerticalAlignment="Center" Margin="8,1,0,0"/>
+
+            </StackPanel>
+
+        </Grid>
+
+        <Grid Grid.Row="1" Background="Transparent">
+            <Grid.Effect>
+                <DropShadowEffect Opacity="0.1" ShadowDepth="8" BlurRadius="16" />
+            </Grid.Effect>
+
+            <Rectangle Fill="{DynamicResource Background}" Opacity="0.75" />
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="10">
+
+                    <TextBlock Text="Appearance" Foreground="{DynamicResource Foreground_Secondary}" Margin="8,5,10,0"/>
+
+                    <buttons:ToggleSwitchButton x:Name="darkmodeSwitch" Icon="" Title="Dark mode" Description="" IsActiveChanged="darkmodeSwitch_IsActiveChanged" />
+
+                    <TextBlock Text="Debug features" Foreground="{DynamicResource Foreground_Secondary}" Margin="8,5,10,0"/>
+
+                    <buttons:CheckBoxButton x:Name="debugmodeSwitch" Icon="" Title="Enable debug features" Description="" IsActiveChanged="debugmodeSwitch_IsActiveChanged" />
+
+                    <TextBlock Text="Configuration" Foreground="{DynamicResource Foreground_Secondary}" Margin="8,5,10,0"/>
+
+                    <buttons:Button x:Name="deleteAllNotesButton" Margin="0,10,0,0" Text="Delete all user notes" Click="deleteAllNotesButton_Click" />
+
+                    <buttons:Button x:Name="clearConfigButton" Text="Clear configuration" Click="clearConfigButton_Click" />
+
+                </StackPanel>
+            </ScrollViewer>
+
+        </Grid>
+
+    </Grid>
+</Page>

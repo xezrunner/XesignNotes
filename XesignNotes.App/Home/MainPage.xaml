@@ -1,0 +1,491 @@
+﻿<Page x:Class="XesignNotes.App.Home.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:controlfx="clr-namespace:XeZrunner.UI.ControlEffects;assembly=XeZrunner.UI"
+      xmlns:local="clr-namespace:XesignNotes.App.Home"
+      xmlns:controls="clr-namespace:XeZrunner.UI.Controls;assembly=XeZrunner.UI"
+      xmlns:buttons="clr-namespace:XeZrunner.UI.Controls.Buttons;assembly=XeZrunner.UI"
+      mc:Ignorable="d" 
+      d:DesignHeight="500" d:DesignWidth="800" Foreground="{DynamicResource Foreground}" controlfx:PointerTracker.Enabled="True"
+      Title="Home"
+      
+      Loaded="Page_Loaded">
+    <Page.Resources>
+        <ControlTemplate x:Key="ScrollViewerControlTemplate" TargetType="{x:Type ScrollViewer}">
+            <Grid x:Name="Grid" Background="{TemplateBinding Background}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Rectangle x:Name="Corner" Grid.Column="1" Fill="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Grid.Row="1"/>
+                <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" CanContentScroll="{TemplateBinding CanContentScroll}" CanHorizontallyScroll="False" CanVerticallyScroll="False" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Grid.Column="0" Grid.ColumnSpan="2" Margin="{TemplateBinding Padding}" Grid.Row="0"/>
+                <ScrollBar x:Name="PART_VerticalScrollBar" Margin="0,48,0,0" AutomationProperties.AutomationId="VerticalScrollBar" Cursor="Arrow" Grid.Column="1" Maximum="{TemplateBinding ScrollableHeight}" Minimum="0" Grid.Row="0" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Style="{DynamicResource ScrollBarStyle}"/>
+                <ScrollBar x:Name="PART_HorizontalScrollBar" AutomationProperties.AutomationId="HorizontalScrollBar" Cursor="Arrow" Grid.Column="0" Maximum="{TemplateBinding ScrollableWidth}" Minimum="0" Orientation="Horizontal" Grid.Row="1" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}"/>
+            </Grid>
+        </ControlTemplate>
+        <Style x:Key="ScrollBarButton" TargetType="{x:Type RepeatButton}">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border x:Name="border" BorderThickness="0" Background="{DynamicResource Background_Secondary}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{DynamicResource Background}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{DynamicResource Foreground}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="contentPresenter" Value="0.56"/>
+                                <Setter Property="Background" TargetName="border" Value="{DynamicResource Background}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ScrollBarThumbVertical" TargetType="{x:Type Thumb}">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Rectangle x:Name="rectangle" Fill="{DynamicResource Foreground_Secondary}" Opacity="0.15" Height="{TemplateBinding Height}" SnapsToDevicePixels="True" Width="{TemplateBinding Width}"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Fill" TargetName="rectangle" Value="{DynamicResource Foreground}"/>
+                                <Setter Property="Opacity" TargetName="rectangle" Value="1" />
+                            </Trigger>
+                            <Trigger Property="IsDragging" Value="true">
+                                <Setter Property="Fill" TargetName="rectangle" Value="{DynamicResource Background_Secondary}"/>
+                                <Setter Property="Opacity" TargetName="rectangle" Value="1" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ScrollBarStyle" TargetType="{x:Type ScrollBar}">
+            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
+            <Setter Property="Background" Value="{DynamicResource Background}"/>
+            <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}"/>
+            <Setter Property="MinWidth" Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                        <Grid x:Name="Bg" SnapsToDevicePixels="true">
+                            <Grid.RowDefinitions>
+                                <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}"/>
+                                <RowDefinition Height="0.00001*"/>
+                                <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}"/>
+                            </Grid.RowDefinitions>
+                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Row="1"/>
+                            <RepeatButton x:Name="PART_LineUpButton" Command="{x:Static ScrollBar.LineUpCommand}" IsEnabled="{TemplateBinding IsMouseOver}" Style="{StaticResource ScrollBarButton}">
+                                <Path x:Name="ArrowTop" Data="M 0,4 C0,4 0,6 0,6 0,6 3.5,2.5 3.5,2.5 3.5,2.5 7,6 7,6 7,6 7,4 7,4 7,4 3.5,0.5 3.5,0.5 3.5,0.5 0,4 0,4 z" Fill="{DynamicResource Foreground}" Margin="3,4,3,3" Stretch="Uniform"/>
+                            </RepeatButton>
+                            <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsMouseOver}" Grid.Row="1">
+
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource ScrollBarThumbVertical}"/>
+                                </Track.Thumb>
+                            </Track>
+                            <RepeatButton x:Name="PART_LineDownButton" Command="{x:Static ScrollBar.LineDownCommand}" IsEnabled="{TemplateBinding IsMouseOver}" Grid.Row="2" Style="{StaticResource ScrollBarButton}">
+                                <Path x:Name="ArrowBottom" Data="M 0,2.5 C0,2.5 0,0.5 0,0.5 0,0.5 3.5,4 3.5,4 3.5,4 7,0.5 7,0.5 7,0.5 7,2.5 7,2.5 7,2.5 3.5,6 3.5,6 3.5,6 0,2.5 0,2.5 z" Fill="{DynamicResource Foreground_Secondary}" Margin="3,4,3,3" Stretch="Uniform"/>
+                            </RepeatButton>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineDownButton}" Value="true"/>
+                                    <Condition Binding="{Binding IsPressed, ElementName=PART_LineDownButton}" Value="true"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Fill" TargetName="ArrowBottom" Value="{DynamicResource Background}"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineUpButton}" Value="true"/>
+                                    <Condition Binding="{Binding IsPressed, ElementName=PART_LineUpButton}" Value="true"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Fill" TargetName="ArrowTop" Value="{DynamicResource Background}"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineDownButton}" Value="true"/>
+                                    <Condition Binding="{Binding IsPressed, ElementName=PART_LineDownButton}" Value="false"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Fill" TargetName="ArrowBottom" Value="{DynamicResource Foreground_Secondary}"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineUpButton}" Value="true"/>
+                                    <Condition Binding="{Binding IsPressed, ElementName=PART_LineUpButton}" Value="false"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Fill" TargetName="ArrowTop" Value="{DynamicResource Foreground_Secondary}"/>
+                            </MultiDataTrigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Fill" TargetName="ArrowTop" Value="{DynamicResource Background}"/>
+                                <Setter Property="Fill" TargetName="ArrowBottom" Value="{DynamicResource Background}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Horizontal">
+                    <Setter Property="Width" Value="Auto"/>
+                    <Setter Property="MinWidth" Value="0"/>
+                    <Setter Property="Height" Value="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarHeightKey}}"/>
+                    <Setter Property="MinHeight" Value="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarHeightKey}}"/>
+                    <Setter Property="BorderThickness" Value="0,1"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                <Grid x:Name="Bg" SnapsToDevicePixels="true">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition MaxWidth="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarButtonWidthKey}}"/>
+                                        <ColumnDefinition Width="0.00001*"/>
+                                        <ColumnDefinition MaxWidth="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarButtonWidthKey}}"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="1"/>
+                                    <RepeatButton x:Name="PART_LineLeftButton" Command="{x:Static ScrollBar.LineLeftCommand}" IsEnabled="{TemplateBinding IsMouseOver}" Style="{StaticResource ScrollBarButton}">
+                                        <Path x:Name="ArrowLeft" Data="M 3.18,7 C3.18,7 5,7 5,7 5,7 1.81,3.5 1.81,3.5 1.81,3.5 5,0 5,0 5,0 3.18,0 3.18,0 3.18,0 0,3.5 0,3.5 0,3.5 3.18,7 3.18,7 z" Fill="{DynamicResource Foreground_Secondary}" Margin="3" Stretch="Uniform"/>
+                                    </RepeatButton>
+                                    <Track x:Name="PART_Track" Grid.Column="1" IsEnabled="{TemplateBinding IsMouseOver}">
+
+                                    </Track>
+                                    <RepeatButton x:Name="PART_LineRightButton" Grid.Column="2" Command="{x:Static ScrollBar.LineRightCommand}" IsEnabled="{TemplateBinding IsMouseOver}" Style="{StaticResource ScrollBarButton}">
+                                        <Path x:Name="ArrowRight" Data="M 1.81,7 C1.81,7 0,7 0,7 0,7 3.18,3.5 3.18,3.5 3.18,3.5 0,0 0,0 0,0 1.81,0 1.81,0 1.81,0 5,3.5 5,3.5 5,3.5 1.81,7 1.81,7 z" Fill="{DynamicResource Foreground_Secondary}" Margin="3" Stretch="Uniform"/>
+                                    </RepeatButton>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineRightButton}" Value="true"/>
+                                            <Condition Binding="{Binding IsPressed, ElementName=PART_LineRightButton}" Value="true"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Fill" TargetName="ArrowRight" Value="{DynamicResource Accent}"/>
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineLeftButton}" Value="true"/>
+                                            <Condition Binding="{Binding IsPressed, ElementName=PART_LineLeftButton}" Value="true"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Fill" TargetName="ArrowLeft" Value="{DynamicResource Accent}"/>
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineRightButton}" Value="true"/>
+                                            <Condition Binding="{Binding IsPressed, ElementName=PART_LineRightButton}" Value="false"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Fill" TargetName="ArrowRight" Value="{DynamicResource Foreground_Secondary}"/>
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsMouseOver, ElementName=PART_LineLeftButton}" Value="true"/>
+                                            <Condition Binding="{Binding IsPressed, ElementName=PART_LineLeftButton}" Value="false"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Fill" TargetName="ArrowLeft" Value="{DynamicResource Foreground_Secondary}"/>
+                                    </MultiDataTrigger>
+                                    <Trigger Property="IsEnabled" Value="false">
+                                        <Setter Property="Fill" TargetName="ArrowLeft" Value="{DynamicResource Background}"/>
+                                        <Setter Property="Fill" TargetName="ArrowRight" Value="{DynamicResource Background}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+
+        <Grid x:Name="main_Area">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <controls:MenuControl x:Name="menuControl" Grid.Column="0" ComapctWidth="65" State="Open" Mode="Normal" ExpandedWidth="300" TitlebarHeight="48"
+                                  HorizontalAlignment="Left">
+
+                <controls:MenuControl.Top>
+                    <Border Height="30" Margin="10,8,10,16">
+                        <Border.Clip>
+                            <RectangleGeometry RadiusX="3" RadiusY="3" Rect="0,0,280,30" />
+                        </Border.Clip>
+                        <Grid>
+                            <Rectangle Fill="{DynamicResource Foreground}" Opacity="0.1" />
+
+                            <TextBlock Foreground="{DynamicResource Foreground_Secondary}" FontSize="13"
+                                       HorizontalAlignment="Left" VerticalAlignment="Center" Margin="13,0">
+                                <Run Text="&#xE11A;" FontSize="14" FontFamily="/Fonts/#Segoe MDL2 Assets" BaselineAlignment="Center" />
+                                <Run Text="   Search in notes..." FontFamily="/Fonts/#Google Sans" />
+                            </TextBlock>
+
+                            <controlfx:RippleEffect RippleStyle="P" Click="menu_searchBar_Click" />
+
+                            <TextBlock Foreground="{DynamicResource Foreground_Secondary}" Text="&#xe109;"
+                                       FontFamily="/Fonts/#Segoe MDL2 Assets" FontSize="14"
+                                       HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,15,0" />
+
+                            <controlfx:RippleEffect HorizontalAlignment="Right" VerticalAlignment="Center" Width="30" Height="30" Margin="0,0,7,0"
+                                                    Click="newNoteButton_Click">
+                                <controlfx:RippleEffect.Clip>
+                                    <EllipseGeometry Center="15,15" RadiusX="15" RadiusY="15" />
+                                </controlfx:RippleEffect.Clip>
+                            </controlfx:RippleEffect>
+                        </Grid>
+                    </Border>
+                </controls:MenuControl.Top>
+
+                <controls:MenuControl.Middle>
+                    <controls:NavigationMenu CurrentSelection="0" Background="Transparent">
+                        <controls:NavigationMenu.Items>
+                            <buttons:ListButton Icon="" Text="Note #1" />
+                            <buttons:ListButton Icon="" Text="Note #2" />
+                            <buttons:ListButton Icon="" Text="Note #3 testing" />
+                            <buttons:ListButton Icon="" Text="Note #4 testing" />
+                            <buttons:ListButton Icon="" Text="Note #5 testing" />
+                        </controls:NavigationMenu.Items>
+                    </controls:NavigationMenu>
+                </controls:MenuControl.Middle>
+
+                <controls:MenuControl.Bottom>
+                    <buttons:ShortcutButton Icon="&#xe115;" Text="Settings" Click="menu_settingsButton_Click" />
+                </controls:MenuControl.Bottom>
+
+                <controls:MenuControl.Under>
+                    <Grid>
+                        <Rectangle Fill="{DynamicResource Background}" Opacity="0.25" Height="48" VerticalAlignment="Top" Visibility="Hidden" />
+                        <Rectangle Fill="{DynamicResource Background}" Opacity="0.68" Margin="0,0,0,0" Visibility="Visible" />
+                        <Rectangle Fill="{DynamicResource Background}" />
+                        <Rectangle Fill="{DynamicResource Foreground}" Opacity="0.02" />
+                    </Grid>
+                </controls:MenuControl.Under>
+            </controls:MenuControl>
+
+            <ScrollViewer x:Name="textbox_ScrollViewer" Grid.Column="1" VerticalScrollBarVisibility="Auto" Template="{DynamicResource ScrollViewerControlTemplate}">
+                <RichTextBox x:Name="textbox"
+                             Background="{DynamicResource Background}" Foreground="{DynamicResource Foreground}" BorderThickness="0"
+                             Padding="10,83,25,0"
+                             TextChanged="textbox_TextChanged">
+                    <RichTextBox.Resources>
+                        <Style TargetType="{x:Type Paragraph}">
+                            <Setter Property="Margin" Value="0"/>
+                        </Style>
+                    </RichTextBox.Resources>
+                </RichTextBox>
+            </ScrollViewer>
+
+            <Grid x:Name="editorTools_Area" Grid.Column="1" VerticalAlignment="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="48" />
+                    <RowDefinition Height="35" />
+                </Grid.RowDefinitions>
+
+                <!-- blur -->
+                <Rectangle Grid.RowSpan="2" >
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{Binding ElementName=textbox_ScrollViewer}" Stretch="None" AlignmentX="Right" AlignmentY="Top" Viewbox="-0.002,0,1,1" />
+                    </Rectangle.Fill>
+                    <Rectangle.BitmapEffect>
+                        <BlurBitmapEffect Radius="10" />
+                    </Rectangle.BitmapEffect>
+                </Rectangle>
+                
+                <!-- tint -->
+                <Rectangle Fill="{DynamicResource Background}" Grid.Row="1" Opacity="0.8" />
+
+                <Grid x:Name="editorTools_toolbar" Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <buttons:AppBarButton Icon="&#xe19b;" Height="35" FontSize="15" />
+                        <buttons:AppBarButton Icon="&#xe19a;" Height="35" FontSize="15" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                        <buttons:AppBarButton Icon="&#xe224;" Height="35" FontSize="15" />
+                        <buttons:AppBarButton Icon="&#xe107;" Height="35" FontSize="15" />
+                    </StackPanel>
+
+                </Grid>
+
+            </Grid>
+
+            <Grid Grid.ColumnSpan="2" Height="48" VerticalAlignment="Top" ClipToBounds="True">
+                <Rectangle Visibility="Hidden">
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{Binding ElementName=textbox_ScrollViewer}" Stretch="None" AlignmentX="Right" AlignmentY="Top" Viewbox="-0.002,0,1,1" />
+                    </Rectangle.Fill>
+                    <Rectangle.BitmapEffect>
+                        <BlurBitmapEffect Radius="10" />
+                    </Rectangle.BitmapEffect>
+                </Rectangle>
+
+                <Rectangle Fill="{DynamicResource Background}" Width="300" HorizontalAlignment="Left" Opacity="0" PreviewMouseLeftButtonDown="Grid_PreviewMouseLeftButtonDown" />
+                
+                <Rectangle Fill="{DynamicResource Background}" Margin="300,0,0,0" Opacity="0.9" PreviewMouseLeftButtonDown="Grid_PreviewMouseLeftButtonDown" />
+
+                <buttons:AppBarButton x:Name="menu_toggleButton" Icon="&#xe76b;" HorizontalAlignment="Left" Click="Menu_toggleButton_Click" />
+
+                <TextBlock Foreground="{DynamicResource Foreground_Secondary}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="65,0,0,0"
+                       FontFamily="/Fonts/#Google Sans" FontSize="16">
+                <Run Foreground="{DynamicResource Foreground}" Text="Xesign" FontWeight="Bold" />
+                Notes
+                </TextBlock>
+            </Grid>
+
+        </Grid>
+
+        <Grid x:Name="searchOverlay" Background="{DynamicResource Background}" Visibility="Hidden">
+            <Rectangle x:Name="searchOverlay_Background" Margin="-35,0,0,0">
+                <Rectangle.BitmapEffect>
+                    <BlurBitmapEffect x:Name="searchOverlay_BlurEffect" Radius="20" />
+                </Rectangle.BitmapEffect>
+                <Rectangle.Fill>
+                    <VisualBrush Visual="{Binding ElementName=main_Area}" Stretch="None" AlignmentX="Left" AlignmentY="Bottom"  />
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <Rectangle x:Name="searchOverlay_BackgroundTint" Fill="{DynamicResource Background}" Opacity="0.1" MouseLeftButtonUp="searchOverlay_Background_MouseLeftButtonUp" />
+
+            <Grid x:Name="searchOverlay_Panel" Width="310" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Rectangle Fill="{DynamicResource Background}" Grid.RowSpan="2" Opacity="0" />
+
+                <Rectangle Fill="{DynamicResource Background}" Opacity="0" Grid.RowSpan="2">
+                    <Rectangle.Clip>
+                        <RectangleGeometry RadiusX="3" RadiusY="3" Rect="-5,0,315,130" />
+                    </Rectangle.Clip>
+                </Rectangle>
+
+                <Border Height="30" Width="280" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,56,10,0">
+                    <Border.Clip>
+                        <RectangleGeometry RadiusX="3" RadiusY="3" Rect="0,0,280,30" />
+                    </Border.Clip>
+                    <Grid>
+                        <Rectangle Fill="{DynamicResource Foreground}" Opacity="0.1" />
+
+                        <controls:TextField x:Name="search_overlay_TextField" Title="" Visibility="Visible"
+                                            TextField_Background="Transparent" FontFamily="/Fonts/#Google Sans"
+                                            Text=""
+                                            Width="280" Height="30" Margin="0" TextPadding="40,-4,0,0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                            TextChanged="search_overlay_TextField_TextChanged"/>
+
+                        <TextBlock Foreground="{DynamicResource Foreground_Secondary}" FontSize="13"
+                                       HorizontalAlignment="Left" VerticalAlignment="Center" Margin="13,0">
+                                <Run Text="&#xE11A;" FontSize="14" FontFamily="/Fonts/#Segoe MDL2 Assets" BaselineAlignment="Center" />
+                        </TextBlock>
+                    </Grid>
+                </Border>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="5" Margin="0,8,5,0">
+                    <controls:NavigationMenu CurrentSelection="0">
+                        <controls:NavigationMenu.Items>
+                            <StackPanel x:Name="searchList" Tag="Search results">
+                                <TextBlock Foreground="{DynamicResource Foreground_Secondary}" Opacity="0.35" HorizontalAlignment="Center" Text="Warning - case sensitive for now!" />
+                            </StackPanel>
+                        </controls:NavigationMenu.Items>
+                    </controls:NavigationMenu>
+                </ScrollViewer>
+
+                <Grid Height="48" VerticalAlignment="Top" ClipToBounds="True">
+
+                    <Rectangle Fill="{DynamicResource Background}" Opacity="0" PreviewMouseLeftButtonDown="Grid_PreviewMouseLeftButtonDown" />
+
+                    <buttons:AppBarButton x:Name="searchOverlay_backButton" Icon="&#xe112;" FontSize="16" HorizontalAlignment="Left" Click="searchOverlay_backButton_Click" />
+
+                    <TextBlock Foreground="{DynamicResource Foreground_Secondary}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="65,0,0,0"
+                       FontFamily="/Fonts/#Google Sans" FontSize="16">
+                <Run Foreground="{DynamicResource Foreground}" Text="Xesign" FontWeight="Bold" />
+                Notes
+                    </TextBlock>
+                </Grid>
+
+            </Grid>
+        </Grid>
+
+        <Grid x:Name="noteList_PopupArea" Background="{DynamicResource Background}" Visibility="Hidden">
+
+            <Rectangle PreviewMouseLeftButtonUp="Rectangle_PreviewMouseLeftButtonUp" Margin="-35,0,0,0">
+                <Rectangle.Fill>
+                    <VisualBrush Visual="{Binding ElementName=main_Area}" Stretch="None" AlignmentX="Left" AlignmentY="Bottom" />
+                </Rectangle.Fill>
+                <Rectangle.BitmapEffect>
+                    <BlurBitmapEffect x:Name="noteList_PopupArea_BlurEffect" Radius="25" />
+                </Rectangle.BitmapEffect>
+            </Rectangle>
+
+            <Grid x:Name="noteList_MainPopup" Width="300" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,102,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <buttons:AppBarButton x:Name="noteList_Popup_CloseButton" Height="25" FontSize="12" Icon="&#xe10a;" HorizontalAlignment="Right" Margin="0,-75,0,0" Click="noteList_Popup_CloseButton_Click"/>
+
+                <Grid>
+                <buttons:NavMenuItem x:Name="noteList_Popup_NoteButton" Icon="" Text="Test #2" IsActive="True" />
+                    <Rectangle Fill="Transparent" />
+                </Grid>
+
+                <StackPanel Grid.Row="1" Margin="0,10,0,0">
+                    <buttons:ActionButton x:Name="noteList_Popup_DeleteButton" Icon="&#xe107;" Text="Delete note" Click="noteList_Popup_DeleteButton_Click" />
+                    <buttons:ActionButton x:Name="noteList_Popup_ChangeColorButton" Icon="&#xe2B1;" Text="Change note color..." Margin="0,2,0,0" Click="noteList_Popup_ChangeColorButton_Click" />
+                    <buttons:ActionButton x:Name="noteList_Popup_DebugInfoButton" Foreground="{DynamicResource Foreground_Secondary}" Margin="0,2,0,0" Icon="&#xe814;" Text="Debug info" Click="noteList_Popup_DebugInfoButton_Click" />
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+
+        <Grid x:Name="settings_Area" Background="{DynamicResource Background}" Visibility="Hidden" Margin="-35,0,0,0">
+
+            <Rectangle x:Name="settings_Area_Background" >
+                <Rectangle.Fill>
+                    <VisualBrush Visual="{Binding ElementName=main_Area}" Stretch="None" AlignmentX="Left" AlignmentY="Bottom" />
+                </Rectangle.Fill>
+                <Rectangle.BitmapEffect>
+                    <BlurBitmapEffect Radius="25" x:Name="settings_Area_BlurEffect" />
+                </Rectangle.BitmapEffect>
+            </Rectangle>
+
+            <Rectangle x:Name="settings_Area_Tint" Fill="{DynamicResource Foreground}" Opacity="0.03" MouseLeftButtonUp="settings_Area_Background_MouseLeftButtonUp" />
+
+            <Grid Margin="100,65">
+
+                <Frame x:Name="settings_Frame" NavigationUIVisibility="Hidden" />
+
+            </Grid>
+
+        </Grid>
+
+    </Grid>
+</Page>

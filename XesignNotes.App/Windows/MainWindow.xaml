@@ -1,0 +1,32 @@
+﻿<Window x:Class="XesignNotes.App.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XesignNotes.App"
+        xmlns:window_components="clr-namespace:XeZrunner.UI.Controls.Window_components;assembly=XeZrunner.UI"
+        xmlns:popups="clr-namespace:XeZrunner.UI.Popups;assembly=XeZrunner.UI"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="800" Background="#01FFFFFF"
+        AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterScreen"
+        
+        Loaded="Window_Loaded" PreviewKeyUp="Window_PreviewKeyUp">
+
+    <Border BorderBrush="#3F000000" BorderThickness="0">
+        <Grid>
+
+            <Rectangle x:Name="fallback_Background" Opacity="1" Fill="{DynamicResource Background}" />
+
+            <Grid x:Name="frameContainer" />
+
+            <popups:ContentDialogHost x:Name="contentdialogHost" />
+
+            <window_components:TitlebarControl MenuButtonVisibility="Collapsed" AppTitle="" HorizontalAlignment="Right" Margin="0,5,5,0" />
+
+            <Image x:Name="themechangeImage" Visibility="Hidden" />
+
+        </Grid>
+    </Border>
+
+</Window>
+ 
