@@ -1,0 +1,3 @@
+[submodule "XeZrunner.UI"]
+	path = XesignNotes/XeZrunner.UI
+	url = https://github.com/xezrunner/XeZrunner.UI
